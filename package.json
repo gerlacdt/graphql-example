@@ -1,0 +1,42 @@
+{
+  "name": "graphql-example",
+  "version": "0.1.0",
+  "description": "sample graphql project",
+  "main": "",
+  "scripts": {
+    "start": "tsc-watch --outDir ./dist --onSuccess 'node ./dist/app/server.js'",
+    "compile": "npm run lint; rm -rf dist/; tsc -p .",
+    "watch": "tsc -w -p .",
+    "test": "mocha --require source-map-support/register --recursive dist/test",
+    "lint": " eslint src/ --ext .ts",
+    "lint-fix": " eslint src/ --ext .ts --fix",
+    "pretty": "prettier --trailing-comma all --write 'src/**/*.ts'"
+  },
+  "keywords": [],
+  "author": "gerlacdt",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-graphql": "^0.9.0",
+    "graphql": "^14.6.0",
+    "source-map-support": "^0.5.16"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.9",
+    "@types/express": "^4.17.2",
+    "@types/mocha": "^7.0.1",
+    "@types/node": "^13.7.1",
+    "@typescript-eslint/eslint-plugin": "^2.19.2",
+    "@typescript-eslint/parser": "^2.19.2",
+    "chai": "^4.2.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "mocha": "^7.0.1",
+    "prettier": "^1.19.1",
+    "supertest": "^4.0.2",
+    "tsc-watch": "^4.1.0",
+    "typescript": "^3.7.5"
+  }
+}
