@@ -9,6 +9,12 @@ type FooResponse {
 result: Int!
 }
 
+type RandomDie {
+numSides: Int!
+rollOnce: Int!
+roll(numRolls: Int!): [Int]
+}
+
 type Query {
 hello: String
 foo(id: String!): FooResponse
@@ -17,8 +23,25 @@ quoteOfTheDay: String
 random: Float!
 rollThreeDice: [Int]
 rollDice(numDice: Int!, numSides: Int): [Int]
+getDie(numSides: Int): RandomDie
 }
 `);
+
+class RandomDie {
+  constructor(public numSides: number) {}
+
+  public rollOnce(): number {
+    return 1 + Math.floor(Math.random() * this.numSides);
+  }
+
+  public roll({ numRolls }: { numRolls: number }): number[] {
+    const output = [];
+    for (var i = 0; i < numRolls; i++) {
+      output.push(this.rollOnce());
+    }
+    return output;
+  }
+}
 
 // The root provides a resolver function for each API endpoint
 const root = {
@@ -46,16 +69,18 @@ const root = {
     }
     return output;
   },
+  getDie: ({ numSides = 6 }: { numSides?: number }) => {
+    return new RandomDie(numSides);
+  },
 };
 
-const app = express();
+export const app = express();
+
 app.use(
   "/graphql",
   graphqlHTTP({
-    schema: schema,
+    schema,
     rootValue: root,
     graphiql: true,
   }),
 );
-
-export { app };
