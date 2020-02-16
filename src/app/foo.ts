@@ -1,11 +1,15 @@
-export function foo({ id }: { id: string }): number {
+interface FooResponse {
+  result: number;
+}
+
+export function foo({ id }: { id: string }): FooResponse {
   const table: { [key: string]: number } = { a: 42, b: 100 };
   const result = table[id];
   console.log("foo(%s) = %s", id, result);
   if (!result) {
-    return 666;
+    return { result: 666 };
   }
-  return result;
+  return { result };
 }
 
 export function hello(): string {
