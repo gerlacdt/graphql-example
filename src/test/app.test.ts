@@ -22,7 +22,7 @@ describe("graphql client", () => {
       .send(JSON.stringify({ query: "{ add(a: 1, b: 2) { result }}" }))
       .expect(200);
     const body = response.body;
-    expect(body).toEqual({ data: { result: 3 } });
+    expect(body).toEqual({ data: { add: { result: 3 } } });
   });
 
   test("getDie", async () => {

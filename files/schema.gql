@@ -1,4 +1,4 @@
-type FooResponse {
+type AddResponse {
   result: Int!
 }
 
@@ -22,12 +22,8 @@ type Message {
 
 type Query {
   hello: String
-  foo(id: String!): FooResponse
+  add(a: Int!, b: Int!): AddResponse
   getMessage(id: ID!): Message
-  quoteOfTheDay: String
-  random: Float!
-  rollThreeDice: [Int]
-  rollDice(numDice: Int!, numSides: Int): [Int]
   getDie(numSides: Int): RandomDie
 }
 
