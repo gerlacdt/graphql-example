@@ -7,7 +7,7 @@ export class DiceService {
 
   public roll({ numRolls }: { numRolls: number }): number[] {
     const output = [];
-    for (var i = 0; i < numRolls; i++) {
+    for (let i = 0; i < numRolls; i++) {
       output.push(this.rollOnce());
     }
     return output;

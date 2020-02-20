@@ -17,7 +17,7 @@ type MsgDatabase = Record<string, { content: string; author: string }>;
 export class MessageService {
   constructor(public db: MsgDatabase) {}
 
-  getMessage({ id }: { id: string }) {
+  getMessage({ id }: { id: string }): Message {
     if (!this.db[id]) {
       throw new Error("no message exists with id " + id);
     }
@@ -25,9 +25,9 @@ export class MessageService {
     return new Message(id, content, author);
   }
 
-  createMessage({ input }: { input: MessageInput }) {
+  createMessage({ input }: { input: MessageInput }): Message {
     // Create a random id for our "database".
-    var id = require("crypto")
+    const id = require("crypto")
       .randomBytes(10)
       .toString("hex");
 
@@ -36,7 +36,7 @@ export class MessageService {
     return new Message(id, content, author);
   }
 
-  updateMessage({ id, input }: { id: string; input: MessageInput }) {
+  updateMessage({ id, input }: { id: string; input: MessageInput }): Message {
     if (!this.db[id]) {
       throw new Error("no message exists with id " + id);
     }

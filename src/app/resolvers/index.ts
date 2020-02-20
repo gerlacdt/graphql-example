@@ -22,7 +22,7 @@ const msgService = new MessageService(fakeDatabase);
 const root = {
   hello,
   add,
-  getDie: ({ numSides = 6 }: { numSides?: number }) => {
+  getDie: ({ numSides = 6 }: { numSides?: number }): DiceService => {
     return new DiceService(numSides);
   },
   ...msgService,
