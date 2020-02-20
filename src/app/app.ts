@@ -2,47 +2,13 @@ import * as express from "express";
 import * as graphqlHTTP from "express-graphql";
 import { buildSchema } from "graphql";
 import { foo, hello } from "./foo";
+import * as fs from "fs";
+import * as path from "path";
 
 // Construct a schema, using GraphQL schema language
-const schema = buildSchema(`
-type FooResponse {
-result: Int!
-}
-
-type RandomDie {
-ip: String
-numSides: Int!
-rollOnce: Int!
-roll(numRolls: Int!): [Int]
-}
-
-input MessageInput {
-content: String
-author: String
-}
-
-type Message {
-id: ID!
-content: String
-author: String
-}
-
-type Query {
-hello: String
-foo(id: String!): FooResponse
-getMessage(id: ID!): Message
-quoteOfTheDay: String
-random: Float!
-rollThreeDice: [Int]
-rollDice(numDice: Int!, numSides: Int): [Int]
-getDie(numSides: Int): RandomDie
-}
-
-type Mutation {
-createMessage(input: MessageInput): Message
-updateMessage(id: ID!, input: MessageInput): Message
-}
-`);
+const schema = buildSchema(
+  fs.readFileSync(path.join(__dirname, "./schema.gql")).toString("utf8"),
+);
 
 const loggingMiddleware = (
   req: express.Request,

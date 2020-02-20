@@ -1,0 +1,37 @@
+type FooResponse {
+  result: Int!
+}
+
+type RandomDie {
+  ip: String
+  numSides: Int!
+  rollOnce: Int!
+  roll(numRolls: Int!): [Int]
+}
+
+input MessageInput {
+  content: String
+  author: String
+}
+
+type Message {
+  id: ID!
+  content: String
+  author: String
+}
+
+type Query {
+  hello: String
+  foo(id: String!): FooResponse
+  getMessage(id: ID!): Message
+  quoteOfTheDay: String
+  random: Float!
+  rollThreeDice: [Int]
+  rollDice(numDice: Int!, numSides: Int): [Int]
+  getDie(numSides: Int): RandomDie
+}
+
+type Mutation {
+  createMessage(input: MessageInput): Message
+  updateMessage(id: ID!, input: MessageInput): Message
+}
