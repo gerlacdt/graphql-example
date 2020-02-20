@@ -1,111 +1,16 @@
 import * as express from "express";
 import * as graphqlHTTP from "express-graphql";
 import { buildSchema } from "graphql";
-import { foo, hello } from "./foo";
 import * as fs from "fs";
 import * as path from "path";
+
+import { loggingMiddleware } from "./middleware/logging";
+import { root } from "./resolvers";
 
 // Construct a schema, using GraphQL schema language
 const schema = buildSchema(
   fs.readFileSync(path.join(__dirname, "./schema.gql")).toString("utf8"),
 );
-
-const loggingMiddleware = (
-  req: express.Request,
-  _res: express.Response,
-  next: express.NextFunction,
-) => {
-  console.log("ip: %s", req.ip);
-  next();
-};
-
-class Message {
-  constructor(
-    public id: string,
-    public content: string,
-    public author: string,
-  ) {}
-}
-
-class MessageInput {
-  constructor(public content: string, public author: string) {}
-}
-
-const fakeDatabase: Record<string, { content: string; author: string }> = {};
-
-class RandomDie {
-  constructor(public numSides: number) {}
-
-  public rollOnce(): number {
-    return 1 + Math.floor(Math.random() * this.numSides);
-  }
-
-  public roll({ numRolls }: { numRolls: number }): number[] {
-    const output = [];
-    for (var i = 0; i < numRolls; i++) {
-      output.push(this.rollOnce());
-    }
-    return output;
-  }
-}
-
-// The root provides a resolver function for each API endpoint
-const root = {
-  hello,
-  foo,
-  quoteOfTheDay: () => {
-    return Math.random() < 0.5 ? "Take it easy" : "Salvation lies within";
-  },
-  random: () => {
-    return Math.random();
-  },
-  rollThreeDice: () => {
-    return [1, 2, 3].map(_ => 1 + Math.floor(Math.random() * 6));
-  },
-  rollDice: ({
-    numDice,
-    numSides = 6,
-  }: {
-    numDice: number;
-    numSides?: number;
-  }) => {
-    var output = [];
-    for (var i = 0; i < numDice; i++) {
-      output.push(1 + Math.floor(Math.random() * numSides));
-    }
-    return output;
-  },
-  getDie: ({ numSides = 6 }: { numSides?: number }) => {
-    return new RandomDie(numSides);
-  },
-
-  getMessage: ({ id }: { id: string }) => {
-    if (!fakeDatabase[id]) {
-      throw new Error("no message exists with id " + id);
-    }
-    const { content, author } = fakeDatabase[id];
-    return new Message(id, content, author);
-  },
-  createMessage: ({ input }: { input: MessageInput }) => {
-    // Create a random id for our "database".
-    var id = require("crypto")
-      .randomBytes(10)
-      .toString("hex");
-
-    fakeDatabase[id] = input;
-    const { content, author } = fakeDatabase[id];
-    return new Message(id, content, author);
-  },
-  updateMessage: ({ id, input }: { id: string; input: MessageInput }) => {
-    if (!fakeDatabase[id]) {
-      throw new Error("no message exists with id " + id);
-    }
-    // This replaces all old data, but some apps might want partial update.
-    fakeDatabase[id] = input;
-    const { content, author } = fakeDatabase[id];
-    return new Message(id, content, author);
-  },
-};
 
 export const app = express();
 
