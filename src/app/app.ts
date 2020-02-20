@@ -9,7 +9,9 @@ import { root } from "./resolvers";
 
 // Construct a schema, using GraphQL schema language
 const schema = buildSchema(
-  fs.readFileSync(path.join(__dirname, "./schema.gql")).toString("utf8"),
+  fs
+    .readFileSync(path.join(__dirname, "../../files/schema.gql"))
+    .toString("utf8"),
 );
 
 export const app = express();
