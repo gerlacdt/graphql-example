@@ -1,4 +1,8 @@
-import { MessageService } from "../services/messageService";
+import {
+  MessageService,
+  Message,
+  MessageInput,
+} from "../services/messageService";
 import { DiceService } from "../services/diceService";
 
 interface AddResponse {
@@ -25,7 +29,24 @@ const root = {
   getDie: ({ numSides = 6 }: { numSides?: number }): DiceService => {
     return new DiceService(numSides);
   },
-  ...msgService,
+  createMessage: ({ input }: { input: MessageInput }): Message => {
+    return msgService.createMessage({ input });
+  },
+  updateMessage: ({
+    id,
+    input,
+  }: {
+    id: string;
+    input: MessageInput;
+  }): Message => {
+    return msgService.updateMessage({ id, input });
+  },
+  getAll: (): Message[] => {
+    return msgService.getAll();
+  },
+  getMessage: ({ id }: { id: string }): Message => {
+    return msgService.getMessage({ id });
+  },
 };
 
 export { root };

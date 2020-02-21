@@ -15,7 +15,7 @@ input MessageInput {
 }
 
 type Message {
-  id: ID!
+  id: String!
   content: String
   author: String
 }
