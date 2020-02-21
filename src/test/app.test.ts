@@ -49,4 +49,19 @@ roll(numRolls: $nrolls)
     expect(body.data.getDie.roll.length).toBe(nrolls);
     expect(body.data.getDie.rollOnce).toBeLessThan(nsides);
   });
+
+  test("insert message", async () => {
+    const data = JSON.stringify({});
+
+    const response = await supertest(app)
+      .post("/graphql")
+      .set("Accept", "application/json")
+      .set("Content-Type", "application/json")
+      .send(data)
+      .expect(200);
+
+    const body = response.body;
+
+    console.log("body: %j", body);
+  });
 });

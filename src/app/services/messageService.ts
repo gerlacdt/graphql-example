@@ -12,10 +12,16 @@ export class MessageInput {
 
 type MsgDatabase = Record<string, { content: string; author: string }>;
 
-// const fakeDatabase: Record<string, { content: string; author: string }> = {};
-
 export class MessageService {
   constructor(public db: MsgDatabase) {}
+
+  getAll(): Message[] {
+    const result: Message[] = [];
+    for (const id in this.db) {
+      result.push({ id, ...this.db[id] });
+    }
+    return result;
+  }
 
   getMessage({ id }: { id: string }): Message {
     if (!this.db[id]) {

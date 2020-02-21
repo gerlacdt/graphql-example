@@ -23,6 +23,7 @@ type Message {
 type Query {
   hello: String
   add(a: Int!, b: Int!): AddResponse
+  getAll: [Message]
   getMessage(id: ID!): Message
   getDie(numSides: Int): RandomDie
 }
