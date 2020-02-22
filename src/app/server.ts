@@ -1,6 +1,7 @@
 import { createApp } from "./app";
 import { MessageServiceImpl } from "./services/messageService";
 import { Deps } from "./model";
+import { logger } from "./logger";
 
 function defaultDeps(): Deps {
   const fakeDatabase: Record<string, { content: string; author: string }> = {};
@@ -12,4 +13,4 @@ function defaultDeps(): Deps {
 const app = createApp(defaultDeps());
 
 app.listen(4000);
-console.log("Running a GraphQL API server at http://localhost:4000/graphql");
+logger.info("Running a GraphQL API server at http://localhost:4000/graphql");
