@@ -1,10 +1,10 @@
 import { createApp } from "../app/app";
-import { Message, MessageService } from "../app/services/messageService";
+import { Message, MessageServiceImpl } from "../app/services/messageService";
 
 import * as supertest from "supertest";
 
 const fakeDatabase: Record<string, { content: string; author: string }> = {};
-const msgService = new MessageService(fakeDatabase);
+const msgService = new MessageServiceImpl(fakeDatabase);
 const app = createApp({ msgService });
 
 async function createMessage({
@@ -15,12 +15,15 @@ async function createMessage({
   content: string;
 }): Promise<Message> {
   const query = `mutation CreateMessage($author: String, $content: String) {
+messages {
 createMessage(input: {author: $author, content: $content}) {
 id
 author
 content
 }
-}`;
+}
+}
+`;
   const data = JSON.stringify({
     query,
     variables: { author, content },
@@ -32,7 +35,7 @@ content
     .send(data)
     .expect(200);
 
-  return response.body.data.createMessage;
+  return response.body.data.messages.createMessage;
 }
 
 describe("graphql client", () => {
@@ -89,10 +92,12 @@ roll(numRolls: $nrolls)
 
   test("insert message", async () => {
     const query = `mutation CreateMessage($author: String, $content: String) {
+messages {
 createMessage(input: {author: $author, content: $content}) {
 id
 author
 content
+}
 }
 }`;
     const data = JSON.stringify({
@@ -106,7 +111,7 @@ content
       .send(data)
       .expect(200);
     const body = response.body;
-    const { id, ...actual } = body.data.createMessage;
+    const { id, ...actual } = body.data.messages.createMessage;
 
     expect(id).toBeDefined();
     expect(actual).toEqual({ author: "danger", content: "foobar" });
@@ -116,12 +121,15 @@ content
     const msg = await createMessage({ author: "danger", content: "foobar" });
 
     const query = `query GetMessage($id: ID!) {
+messages {
 getMessage(id: $id) {
 id
 author
 content
 }
-}`;
+}
+}
+`;
     const data = JSON.stringify({
       query,
       variables: { id: msg.id },
@@ -135,7 +143,7 @@ content
 
     // {"data":{"getMessage":{"id":"51b42fe91835f25b1b68","author":"danger","content":"foobar"}}}
     const body = response.body;
-    const { id, ...actual } = body.data.getMessage;
+    const { id, ...actual } = body.data.messages.getMessage;
     expect(id).toBeDefined();
     expect(actual).toEqual({ author: "danger", content: "foobar" });
   });
@@ -148,12 +156,15 @@ content
     });
 
     const query = `query {
+messages {
 getAll {
 id
 author
 content
 }
-}`;
+}
+}
+`;
     const data = JSON.stringify({
       query,
     });
@@ -165,7 +176,7 @@ content
       .expect(200);
 
     const body = response.body;
-    const actual = body.data.getAll;
+    const actual = body.data.messages.getAll;
     expect(actual.length).toEqual(2);
   });
 });

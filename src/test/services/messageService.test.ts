@@ -1,8 +1,8 @@
-import { MessageService } from "../../app/services/messageService";
+import { MessageServiceImpl } from "../../app/services/messageService";
 
 describe("MessageService", () => {
   test("insert message", () => {
-    const svc = new MessageService({});
+    const svc = new MessageServiceImpl({});
 
     const input = { author: "foobar-author", content: "content" };
     const msg = svc.createMessage({
@@ -16,7 +16,7 @@ describe("MessageService", () => {
 
   test("get all message", () => {
     // create 2 messages
-    const svc = new MessageService({});
+    const svc = new MessageServiceImpl({});
     const input = { author: "foobar-author", content: "content" };
     svc.createMessage({
       input,
@@ -31,7 +31,7 @@ describe("MessageService", () => {
   });
 
   test("get message by id", () => {
-    const svc = new MessageService({});
+    const svc = new MessageServiceImpl({});
     const input = { author: "foobar-author", content: "content" };
     const msg = svc.createMessage({
       input,

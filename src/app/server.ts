@@ -1,10 +1,10 @@
 import { createApp } from "./app";
-import { MessageService } from "./services/messageService";
+import { MessageServiceImpl } from "./services/messageService";
 import { Deps } from "./model";
 
 function defaultDeps(): Deps {
   const fakeDatabase: Record<string, { content: string; author: string }> = {};
-  const msgService = new MessageService(fakeDatabase);
+  const msgService = new MessageServiceImpl(fakeDatabase);
 
   return { msgService };
 }

@@ -1,7 +1,6 @@
-import { Message, MessageInput } from "../services/messageService";
+import { MessageService } from "../services/messageService";
 import { DiceService } from "../services/diceService";
 import { Deps } from "../model";
-import { createMessageResolver } from "./messageResolver";
 
 interface AddResponse {
   result: number;
@@ -21,16 +20,7 @@ export interface RootResolver {
   hello: () => string;
   add: ({ a, b }: { a: number; b: number }) => AddResponse;
   getDie: (input: { numSides?: number }) => DiceService;
-  createMessage: ({ input }: { input: MessageInput }) => Message;
-  updateMessage: ({
-    id,
-    input,
-  }: {
-    id: string;
-    input: MessageInput;
-  }) => Message;
-  getAll: () => Message[];
-  getMessage: ({ id }: { id: string }) => Message;
+  messages: MessageService;
 }
 
 export function createRoot(deps: Deps): RootResolver {
@@ -41,7 +31,7 @@ export function createRoot(deps: Deps): RootResolver {
     getDie: ({ numSides = 6 }: { numSides?: number }): DiceService => {
       return new DiceService(numSides);
     },
-    ...createMessageResolver(deps.msgService),
+    messages: deps.msgService,
   };
   return root;
 }

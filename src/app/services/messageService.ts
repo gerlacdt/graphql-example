@@ -12,7 +12,14 @@ export class MessageInput {
 
 export type MsgDatabase = Record<string, { content: string; author: string }>;
 
-export class MessageService {
+export interface MessageService {
+  getAll(): Message[];
+  getMessage({ id }: { id: string }): Message;
+  createMessage({ input }: { input: MessageInput }): Message;
+  updateMessage({ id, input }: { id: string; input: MessageInput }): Message;
+}
+
+export class MessageServiceImpl implements MessageService {
   constructor(public db: MsgDatabase) {}
 
   deleteAll(): void {
