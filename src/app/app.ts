@@ -1,4 +1,5 @@
 import * as express from "express";
+import * as bodyParser from "body-parser";
 import * as graphqlHTTP from "express-graphql";
 import { buildSchema } from "graphql";
 import * as fs from "fs";
@@ -21,6 +22,7 @@ export function createApp(deps: Deps): express.Application {
 
   const app = express();
 
+  app.use(bodyParser.json());
   app.use(loggingMiddleware);
   app.use(
     "/graphql",

@@ -5,7 +5,7 @@ const loggingMiddleware = (
   _res: express.Response,
   next: express.NextFunction,
 ): void => {
-  console.log("ip: %s", req.ip);
+  console.log("body: %s", req.body);
   next();
 };
 
