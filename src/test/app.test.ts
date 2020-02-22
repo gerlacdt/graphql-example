@@ -1,7 +1,11 @@
-import { app } from "../app/app";
-import { Message } from "../app/services/messageService";
+import { createApp } from "../app/app";
+import { Message, MessageService } from "../app/services/messageService";
 
 import * as supertest from "supertest";
+
+const fakeDatabase: Record<string, { content: string; author: string }> = {};
+const msgService = new MessageService(fakeDatabase);
+const app = createApp({ msgService });
 
 async function createMessage({
   author,
@@ -32,6 +36,10 @@ content
 }
 
 describe("graphql client", () => {
+  beforeEach(() => {
+    msgService.deleteAll();
+  });
+
   test("hello query", async () => {
     const response = await supertest(app)
       .post("/graphql")

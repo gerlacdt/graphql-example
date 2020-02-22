@@ -1,9 +1,6 @@
-import {
-  MessageService,
-  Message,
-  MessageInput,
-} from "../services/messageService";
+import { Message, MessageInput } from "../services/messageService";
 import { DiceService } from "../services/diceService";
+import { Deps } from "../model";
 
 interface AddResponse {
   result: number;
@@ -19,34 +16,48 @@ export function hello(): string {
   return "Hello world!";
 }
 
-const fakeDatabase: Record<string, { content: string; author: string }> = {};
-const msgService = new MessageService(fakeDatabase);
-
-// The root provides a resolver function for each API endpoint
-const root = {
-  hello,
-  add,
-  getDie: ({ numSides = 6 }: { numSides?: number }): DiceService => {
-    return new DiceService(numSides);
-  },
-  createMessage: ({ input }: { input: MessageInput }): Message => {
-    return msgService.createMessage({ input });
-  },
+export interface RootResolver {
+  hello: () => string;
+  add: ({ a, b }: { a: number; b: number }) => AddResponse;
+  getDie: (input: { numSides?: number }) => DiceService;
+  createMessage: ({ input }: { input: MessageInput }) => Message;
   updateMessage: ({
     id,
     input,
   }: {
     id: string;
     input: MessageInput;
-  }): Message => {
-    return msgService.updateMessage({ id, input });
-  },
-  getAll: (): Message[] => {
-    return msgService.getAll();
-  },
-  getMessage: ({ id }: { id: string }): Message => {
-    return msgService.getMessage({ id });
-  },
-};
+  }) => Message;
+  getAll: () => Message[];
+  getMessage: ({ id }: { id: string }) => Message;
+}
 
-export { root };
+export function createRoot(deps: Deps): RootResolver {
+  // The root provides a resolver function for each API endpoint
+  const root = {
+    hello,
+    add,
+    getDie: ({ numSides = 6 }: { numSides?: number }): DiceService => {
+      return new DiceService(numSides);
+    },
+    createMessage: ({ input }: { input: MessageInput }): Message => {
+      return deps.msgService.createMessage({ input });
+    },
+    updateMessage: ({
+      id,
+      input,
+    }: {
+      id: string;
+      input: MessageInput;
+    }): Message => {
+      return deps.msgService.updateMessage({ id, input });
+    },
+    getAll: (): Message[] => {
+      return deps.msgService.getAll();
+    },
+    getMessage: ({ id }: { id: string }): Message => {
+      return deps.msgService.getMessage({ id });
+    },
+  };
+  return root;
+}

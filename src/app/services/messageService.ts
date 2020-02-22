@@ -10,10 +10,14 @@ export class MessageInput {
   constructor(public content: string, public author: string) {}
 }
 
-type MsgDatabase = Record<string, { content: string; author: string }>;
+export type MsgDatabase = Record<string, { content: string; author: string }>;
 
 export class MessageService {
   constructor(public db: MsgDatabase) {}
+
+  deleteAll(): void {
+    this.db = {};
+  }
 
   getAll(): Message[] {
     console.log("getAll()");
