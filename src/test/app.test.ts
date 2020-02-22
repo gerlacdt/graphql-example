@@ -82,7 +82,6 @@ roll(numRolls: $nrolls)
       .send(data)
       .expect(200);
 
-    // example: {"data":{"getDie":{"rollOnce":61,"roll":[45,1,52,38,21]}}}
     const body = response.body;
 
     expect(body.data).toBeDefined();
@@ -141,7 +140,6 @@ content
       .send(data)
       .expect(200);
 
-    // {"data":{"getMessage":{"id":"51b42fe91835f25b1b68","author":"danger","content":"foobar"}}}
     const body = response.body;
     const { id, ...actual } = body.data.messages.getMessage;
     expect(id).toBeDefined();

@@ -7,7 +7,6 @@ interface AddResponse {
 }
 
 export function add({ a, b }: { a: number; b: number }): AddResponse {
-  console.log("%d + %d", a, b);
   const result = a + b;
   return { result };
 }

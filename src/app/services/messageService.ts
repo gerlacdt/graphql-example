@@ -27,7 +27,6 @@ export class MessageServiceImpl implements MessageService {
   }
 
   getAll(): Message[] {
-    console.log("getAll()");
     const result: Message[] = [];
     for (const id in this.db) {
       result.push({ id, ...this.db[id] });
@@ -36,7 +35,6 @@ export class MessageServiceImpl implements MessageService {
   }
 
   getMessage({ id }: { id: string }): Message {
-    console.log("getMessage()");
     if (!this.db[id]) {
       throw new Error("no message exists with id " + id);
     }
@@ -45,7 +43,6 @@ export class MessageServiceImpl implements MessageService {
   }
 
   createMessage({ input }: { input: MessageInput }): Message {
-    console.log("createMessage()");
     // Create a random id for our "database".
     const id = require("crypto")
       .randomBytes(10)
@@ -56,12 +53,10 @@ export class MessageServiceImpl implements MessageService {
 
     const result = new Message(id, content, author);
 
-    console.log("result: %j", result);
     return result;
   }
 
   updateMessage({ id, input }: { id: string; input: MessageInput }): Message {
-    console.log("updateMessage()");
     if (!this.db[id]) {
       throw new Error("no message exists with id " + id);
     }
